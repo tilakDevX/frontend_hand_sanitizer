@@ -1,0 +1,18 @@
+.App{
+  text-align: center;
+}
+.fp:hover{
+  color:#b8ddbe;
+}
+
+.Social>img{
+  width:40px;
+  
+}
+.Social:nth-child(2) img{
+  width:60px;
+}
+.Social{
+  border:none;
+  background-color:white;
+}
