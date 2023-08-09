@@ -59,6 +59,8 @@ function Home(props) {
               m={"auto"}
               mt={"5%"}
               w={"50%"}
+              bg={"black"}
+              color={"white"}
             >
               Buy Now
             </Button>

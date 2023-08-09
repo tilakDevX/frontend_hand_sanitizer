@@ -62,11 +62,12 @@
 
     .toggleButton{
         display: block;
-        top :70px;
+        top :95px;
         position: fixed;
         border: none;
         background: none;
         font-size: 25px;
+        margin-left: 10px;
 
     }
     .open {
