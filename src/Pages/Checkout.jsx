@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Divider,
-  Input,
-  Radio,
-  Select,
-  VStack,
-  background,
-} from "@chakra-ui/react";
+import { Input, Link, Radio, Select } from "@chakra-ui/react";
 import axios from "axios";
 import {
   Box,
@@ -16,56 +9,58 @@ import {
   Image,
   Button,
   Stack,
- 
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
 function Checkout(props) {
   const [cartItems, setCartItems] = useState([]);
-  const [cartTotal, setCartTotal] = useState(0);
+  const [id, setId]  = useState("")
   const [flag, setFlag] = useState(false);
-
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     // Calculate the cart total whenever the cart items change
     calculateCartTotal();
-  }, [cartItems]);
+  }, [cartItems, quantity]);
 
+ 
   useEffect(() => {
-    axios.get("https://sanitizer-5qvt.onrender.com/products").then((res) => {
+
+
+    const buy = localStorage.getItem("buy");
+    axios.get(`https://puce-magpie-tie.cyclic.app/products/${buy}`).then((res) => {
       console.log(res.data);
-      setCartItems(res.data.map((item) => ({ ...item, quantity: 1 })));
+      setCartItems(res.data);
     });
   }, []);
 
   const calculateCartTotal = () => {
     let total = 0;
-    for (const item of cartItems) {
-      total += item.MRP * item.quantity; // Multiply price by quantity
+    for (const itemId in cartItems) {
+      if (cartItems.hasOwnProperty(itemId)) {
+        const item = cartItems[itemId];
+        total += item.MRP * item.quantity;
+      }
     }
-    setCartTotal(total);
+    
   };
 
-  const handleDecreaseQuantity = (index) => {
-    const updatedCartItems = [...cartItems];
-    if (updatedCartItems[index].quantity > 1) {
-      updatedCartItems[index].quantity--;
-      setCartItems(updatedCartItems);
-    }
+  const handleQuantity = (value) => {
+    const newQuantity = Math.max(1, quantity + value);
+    setQuantity(newQuantity);
   };
 
-  const handleIncreaseQuantity = (index) => {
-    const updatedCartItems = [...cartItems];
-    updatedCartItems[index].quantity++;
-    setCartItems(updatedCartItems);
-  };
+  const genrateId =()=>{
 
-
-
-
+    const timestamp = Date.now(); // Current timestamp in milliseconds
+    const randomNum = Math.floor(Math.random() * 10000); // Random number between 0 and 9999
+    const orderID = `${timestamp}-${randomNum}`;
+      setId(orderID)
+    setFlag(true);
+  }
 
   return (
-    <Box border="2px solid gray" m="0.3rem" mt={50}>
+    <Box border="2px solid gray" m="0.3rem" mt={"12rem"}>
       <Flex borderBottom={"2px solid gray"}>
         <Box w="40%" p="0.4rem" borderRight={"2px solid gray"}>
           <HamburgerIcon />
@@ -79,12 +74,24 @@ function Checkout(props) {
       <Flex>
         {flag ? (
           <Box width={"40%"} borderRight={"2px solid gray"} p="6rem" mt={10}>
-            <Heading as='h1' size='2xl'>THANK YOU FOR ORDER</Heading>
-            <Text mt="0.8rem">Your order number is 1234 you can track your order on your <span style={{color:"orange"}}>personal account</span> or continue shoping</Text>
-            <Text mt="3rem" fontSize={"2rem"}  color="gray">FOLLOW US ON INSTAGRAM @thisiskmv</Text>
+            <Heading as="h1" size="2xl">
+              THANK YOU FOR ORDER
+            </Heading>
+            <Text mt="0.8rem">
+              Your order id is: {id} <br /> You can track your order on your
+              personal account or continue shoping.
+            </Text>
+            <Text mt="3rem" fontSize={"2rem"} color="gray">
+              FOLLOW US ON INSTAGRAM @haanSanitizer
+            </Text>
+
+            <Flex justifyContent={"space-evenly"} pt={"20px"}>
+              <Link href='/' color={"red.400"}>Go To HomePage</Link>
+              <Link href='/product' color={"green.800"}>Continue Shoping</Link>
+            </Flex>
           </Box>
         ) : (
-          <Box width={"40%"} borderRight={"2px solid gray"} p="5rem" >
+          <Box width={"40%"} borderRight={"2px solid gray"} p="5rem">
             <Heading width="100%" fontSize={"3rem"} mb="2rem">
               CHECKOUT
             </Heading>
@@ -118,7 +125,7 @@ function Checkout(props) {
               </Flex>
             </Stack>
 
-            <Box >
+            <Box>
               <Text mt="1rem">Payment</Text>
               <Input variant="flushed" placeholder="XXXXX XXXXX XXXXX XXXXX" />
               <Flex>
@@ -128,7 +135,16 @@ function Checkout(props) {
               <Input variant="flushed" placeholder="CVV" />
             </Box>
             <Flex justifyContent={"end"}>
-              <Button mt="0.8rem" _hover={"none"} bg="orange" color="white" onClick={()=>{setFlag(true)}}>
+              <Button
+                mt="0.8rem"
+                _hover={"none"}
+                bg="orange"
+                color="white"
+                onClick={ 
+                  
+                  genrateId
+                 }
+              >
                 PAY
               </Button>
             </Flex>
@@ -137,40 +153,37 @@ function Checkout(props) {
 
         <Box width={"60%"}>
           {/* Render the cart items */}
-          {cartItems.slice(0,5).map((item, index) => (
+
+          <Flex
+            key={cartItems._id}
+            justifyContent={"space-between"}
+            borderBottom={"2px solid gray"}
+          >
+            <Image w="25%" src={cartItems.img} />
             <Flex
-              key={index}
-              justifyContent={"space-between"}
-              borderBottom={"2px solid gray"}
+              minWidth={"70%"}
+              justify={"space-around"}
+              alignItems={"center"}
             >
-              <Image w="25%" src={item.img} />
-              <Flex
-                minWidth={"70%"}
-                justify={"space-around"}
-                alignItems={"center"}
-              >
-                <Box>
-                  <Text>{item.brand.slice(0, 22)}</Text>
-                </Box>
-                <Flex align={"center"}>
-                  <Button onClick={() => handleDecreaseQuantity(index)}>
-                    -
-                  </Button>
-                  <Text ml="0.8rem" mr="0.8rem">
-                    {item.quantity}
-                  </Text>
-                  <Button onClick={() => handleIncreaseQuantity(index)}>
-                    +
-                  </Button>
-                </Flex>
-                <Box>
-                  {" "}
-                  <Text>€ {(item.MRP * item.quantity).toFixed(2)}</Text>
-                </Box>
-                {/* </Grid> */}
+              <Box>
+                <Text>{cartItems.brand}</Text>
+              </Box>
+              <Flex align={"center"}>
+                <Button
+                  disabled={quantity === 1}
+                  onClick={() => handleQuantity(-1)}
+                >
+                  -
+                </Button>
+                <Text ml="0.8rem" mr="0.8rem">
+                  {quantity}
+                </Text>
+                <Button onClick={() => handleQuantity(1)}>+</Button>
               </Flex>
+
+              {/* </Grid> */}
             </Flex>
-          ))}
+          </Flex>
 
           <Flex
             p="1rem"
@@ -182,7 +195,7 @@ function Checkout(props) {
               Shopping calculated in count
             </Text>
             <Text fontSize={"0.7rem"}>Total</Text>
-            <Text>€ {cartTotal}</Text>
+            <Text>€ {cartItems.MRP * quantity}</Text>
           </Flex>
         </Box>
       </Flex>

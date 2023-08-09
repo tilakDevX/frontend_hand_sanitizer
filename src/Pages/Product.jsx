@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Select } from '@chakra-ui/react';
+import { Center, Select, Spinner } from '@chakra-ui/react';
 
 import {
   Button,
@@ -19,33 +19,28 @@ import Pagination from './Pagination';
 
 const Product = () => {
   const navigate = useNavigate();
-  const limit = 10;
+  const limit = 8;
 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProd, setTotalProd] = useState(null);
   const [sortOption, setSortOption] = useState(''); 
   const [filterOption, setFilterOption] = useState(''); 
+  const [loading, setLoading] = useState(true)
 
   const fetchdata = async () => {
-    let apiUrl = `https://sanitizer-5qvt.onrender.com/products?_limit=${limit}&_page=${currentPage}`;
+    let apiUrl = `https://puce-magpie-tie.cyclic.app/products?sort=${sortOption}&_limit=${limit}&_page=${currentPage}`;
     
-    // Apply sorting and filtering options to the API URL
-    if (sortOption === 'priceLowToHigh') {
-      apiUrl += `&_sort=finalPrice`; // Sort by the 'finalPrice' field in ascending order
-    }
-    if (sortOption === 'priceHighToLow') {
-      apiUrl += `&_sort=finalPrice&_order=desc`; // Sort by the 'finalPrice' field in descending order
-    }
-    if (filterOption) {
-      apiUrl += `&brand=${filterOption}`; 
-    }
+    
     
     const response = await fetch(apiUrl);
     const data = await response.json();
     setData(data);
-    console.log(data)
-    setTotalProd(response.headers.get('X-Total-Count'));
+    console.log(data.totalCount)
+    setTotalProd(data.totalCount);
+    setData(data.product);
+    setLoading(false)
+     
   };
 
   useEffect(() => {
@@ -90,9 +85,13 @@ const Product = () => {
           margin: 'auto',
         }}
       >
-        {data.map((Product) => {
+        {
+          loading && <Center> <Spinner m={"4rem"} size='xl'/></Center>
+        }
+
+        {data.length>0 && data.map((Product, index) => {
           return (
-            <Card key={Product.id} maxW='sm' id='card'>
+            <Card key={index} maxW='sm' id='card'>
               <CardBody>
                 <Image
                   src={Product.img}
@@ -122,10 +121,10 @@ const Product = () => {
               </CardBody>
               <CardFooter ml={10} >
                 <ButtonGroup spacing='2'>
-                  <Button variant='solid' colorScheme='blue'>
-                    Buy now
+                  <Button variant='solid' colorScheme='blue' onClick={()=>{navigate('/checkout');localStorage.setItem("buy", Product._id )}}>
+                    Buy Now
                   </Button>
-                  <Button variant='ghost' colorScheme='blue' onClick={()=>{navigate('/cart');localStorage.setItem("cart", JSON.stringify(Product))}}>
+                  <Button variant='ghost' colorScheme='blue' onClick={()=>{navigate('/checkout');localStorage.setItem("cart",  Product._id )}}>
                     Add to cart
                   </Button>
                 </ButtonGroup>

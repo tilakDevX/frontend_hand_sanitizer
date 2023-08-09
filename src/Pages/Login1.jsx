@@ -1,41 +1,71 @@
-import React from 'react';
-import { Box, Heading, Text, Center, Flex, HStack, FormControl, Input, Button, Stack, VStack, Card, CardBody, Link } from '@chakra-ui/react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from "react";
+import {
+  Box,
+  Heading,
+  Text,
+  Center,
+  Flex,
+  HStack,
+  FormControl,
+  Input,
+  Button,
+  Stack,
+  VStack,
+  Card,
+  CardBody,
+  Link,
+} from "@chakra-ui/react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import Image1 from "../assets/facebook.png";
 import Image2 from "../assets/twitter.png";
 import Image3 from "../assets/google.png";
 import Image4 from "../assets/amazon.png";
-import {useNavigate} from "react-router-dom"
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login1 = () => {
   // Define validation schema using Yup
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('*Email is required'),
-    password: Yup.string().required('*Password is required')
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("*Email is required"),
+    password: Yup.string().required("*Password is required"),
   });
 
+  const [login_status, setLoginStatus]  = useState("")
   // Define initial form values
   const initialValues = {
-    email: '',
-    password: ''
+    email: "",
+    password: "",
+  };
+
+  const postLogin = (value) => {
+    try {
+      axios.post(`http://localhost:8500/user/login`, value).then((res) => {
+        console.log(res);
+
+        localStorage.setItem("token", res.data.token)
+        setLoginStatus(res.data.message);
+        
+
+        setTimeout(() => {
+          window.location.href = "/";
+          
+        }, 2000);
+         
+      });
+    } catch (error) {
+      alert("An error ocurred while login");
+      console.log("An error ocurred while login");
+      console.error(error);
+    }
   };
 
   // Handle form submission
   const handleSubmit = (values, { setSubmitting }) => {
-    // Retrieve user details from local storage
-    const storedUserJSON = localStorage.getItem('user');
-    const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null;
-
-    if (storedUser && storedUser.email === values.email && storedUser.password === values.password) {
-      alert('Login successful!');
-      // Redirect to homepage
-      window.location.href = '/';
-    } else {
-      alert('Invalid email or password');
-    }
+    postLogin(values);
 
     // Reset the form
     setSubmitting(false);
@@ -43,41 +73,45 @@ const Login1 = () => {
 
   return (
     <Box mt="200px">
-        <Center mb="1rem">
-        <Heading as="h2" fontWeight="300" fontSize="20px" letterSpacing="-0.2px">
-        Login
-      </Heading>
+      <Center mb="1rem">
+        <Heading
+          as="h2"
+          fontWeight="300"
+          fontSize="20px"
+          letterSpacing="-0.2px"
+        >
+          Login
+        </Heading>
       </Center>
-     <Center>
-     
-      <Text>Please enter your e-mail and password</Text>
-     </Center>
-     
+      <Center>
+        <Text>Please enter your e-mail and password</Text>
+      </Center>
+
       <Center>
         <Flex>
           <HStack spacing="20">
-          <Center>
-        <Flex>
-          <HStack spacing="20"  >
-            <button  className='Social'>
-              <img width="40px" src={Image1} alt="" />
-            </button>
-            <button className='Social'>
-              <img width="60px" src={Image2} alt="" />
-            </button>
-            <button className='Social'>
-              <img width="40px" src={Image3} alt="" />
-            </button>
-            <button className='Social'>
-              <img width="40px" src={Image4} alt="" />
-            </button>
+            <Center>
+              <Flex>
+                <HStack spacing="20">
+                  <button className="Social">
+                    <img width="40px" src={Image1} alt="" />
+                  </button>
+                  <button className="Social">
+                    <img width="60px" src={Image2} alt="" />
+                  </button>
+                  <button className="Social">
+                    <img width="40px" src={Image3} alt="" />
+                  </button>
+                  <button className="Social">
+                    <img width="40px" src={Image4} alt="" />
+                  </button>
+                </HStack>
+              </Flex>
+            </Center>
           </HStack>
         </Flex>
       </Center>
-          </HStack>
-        </Flex>
-      </Center>
-     
+
       <Center>
         <Stack spacing="4">
           <VStack as="header" spacing="6" mt="8"></VStack>
@@ -104,8 +138,12 @@ const Login1 = () => {
                           padding="10px"
                           borderRadius="30px"
                         />
-                        
-                        <ErrorMessage name="email" component="div" color="#515151" />
+
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          color="#515151"
+                        />
                       </FormControl>
                       <FormControl marginBottom="10px">
                         <Field
@@ -119,11 +157,19 @@ const Login1 = () => {
                           size="lg"
                           padding="10px"
                           borderRadius="30px"
-                        
                         />
-                        <ErrorMessage name="password" component="div" color="#515151" />
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          color="#515151"
+                        />
                       </FormControl>
                       <HStack justifyContent="end">
+
+
+                        {
+                          login_status && <Text fontSize={"15px"} color={"green"}>{login_status}</Text>
+                        }
                         <Button
                           className="fp"
                           as="a"
@@ -136,10 +182,10 @@ const Login1 = () => {
                           alignItems="end"
                           color="#515151"
                         >
-                          Forgot password?
+                          Forgot password ?
                         </Button>
                       </HStack>
-                  
+
                       <Button
                         className="login"
                         type="submit"
@@ -152,9 +198,9 @@ const Login1 = () => {
                         fontSize="15"
                         isLoading={isSubmitting}
                         _hover={{
-                          bg: '#7F7F7F',
-                          color: 'white',
-                         transition: 'background-color 0.3s ease-in-out'
+                          bg: "#7F7F7F",
+                          color: "white",
+                          transition: "background-color 0.3s ease-in-out",
                         }}
                       >
                         Log in
@@ -165,27 +211,21 @@ const Login1 = () => {
               </Formik>
             </CardBody>
           </Card>
-        
 
-          <Card variant="outline" borderColor="#d0d7de">
-            <CardBody>
-              <HStack fontSize="sm">
-                <Link isExternal color="#0969da" href="#">
-                  Manage subscriptions.
-                </Link>
-              </HStack>
-            </CardBody>
-          </Card>
+          <Center as="footer">
+            <HStack spacing="4" pt="2">
+              <Link
+                onClick={() => navigate("/signup")}
+                className="fp"
+                isExternal
+                color="#515151"
+                fontSize="s"
+              >
+                Don't have an account ?
+              </Link>
+            </HStack>
+          </Center>
         </Stack>
-      </Center>
-     
-  
-      <Center as="footer" mt="16">
-        <HStack spacing="4" pt="2">
-          <Link onClick={()=>navigate("/signup")}  className="fp" isExternal color="#515151"  fontSize="xs">
-            Don't have an account?
-          </Link>
-        </HStack>
       </Center>
     </Box>
   );

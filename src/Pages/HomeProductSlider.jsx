@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Flex, Image, Text } from "@chakra-ui/react";
+import { Flex, Image, Spinner, Text ,Center} from "@chakra-ui/react";
 import "../Components/CSS/homeProductSlider.css";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,17 @@ const HomeProductSlider = ({ products, isLoading }) => {
   };
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Center> <Spinner m={"2.5rem"} size='lg'/></Center>
+    )
+  }
+
+  const handleBuy = (id)=>{
+      console.log(id)
+
+      localStorage.setItem("buy", id);
+      navigate(`/checkout`)
+
   }
   return (
     <div className="product-carousel">
@@ -35,7 +45,7 @@ const HomeProductSlider = ({ products, isLoading }) => {
       <div className="product-container" ref={productContainerRef} >
         {products.length > 0 &&
           products.map((element, index) => (
-            <div key={index} className="product-item" onClick={()=>{navigate(`/product`)}}>
+            <div key={index} className="product-item">
               <Image src={element.img} width={"98%"} pt={"10px"} />
               <Text
                 fontWeight={"500"}
@@ -54,7 +64,9 @@ const HomeProductSlider = ({ products, isLoading }) => {
                 {"€ "}
                 <span className="crossed-line">{element.finalPrice}€</span>
               </Text>
-              <button className="button">Add to cart</button>
+              <button className="button" onClick={()=>{
+                handleBuy(element._id)
+              }}>Buy Now</button>
             </div>
           ))}
       </div>

@@ -27,12 +27,15 @@ function Home(props) {
   let [isLoading, setLoading] = useState(true);
   const { searchQuery } = useContext(SearchContext);
 
+  // https://sanitizer-5qvt.onrender.com/products
   useEffect(() => {
+
+
     axios
-      .get(`https://sanitizer-5qvt.onrender.com/products`)
+      .get(`https://puce-magpie-tie.cyclic.app/products`)
       .then((res) => {
-        setProduct(res.data);
-        console.log("geting product", res.data);
+        setProduct(res.data.product);
+        console.log("geting product", res);
         setLoading(false);
       })
       .catch((err) => {
@@ -147,6 +150,8 @@ function Home(props) {
           can be sustainable, beautiful and handy like HAAN Pockets are, it’s
           just a lovely plus.”
         </Text>
+
+       
       </Flex>
     </div>
   );

@@ -15,41 +15,65 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {useNavigate} from "react-router-dom"
+import axios from "axios";
 const SignUp = () => {
+
+
     const navigate=useNavigate()
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setFirstName] = useState("");
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
+  const [signup_status, setSignupStatus] = useState("");
+
+
+  const postSignUp = (value)=>{
+    try {
+      axios.post(`http://localhost:8500/user/signup`, value).then((res)=>{
+        console.log(res)
+        setSignupStatus(res.data.message);
+
+       
+      })
+    } catch (error) {
+      alert("An error ocurred while signup");
+      console.log("An error ocurred while signup")
+      console.error(error)
+      
+    }
+  }
 
 
   const handleSignUp = (e) => {
     e.preventDefault();
   
-    if (!firstName || !lastName || !email || !password || !privacyAccepted) {
+    if (!name   || !email || !password || !privacyAccepted) {
       alert("Please fill in all fields and accept the privacy policy.");
       return;
     }
   
     const user = {
-      firstName,
-      lastName,
+      name,
+       
       email,
       password
     };
+    postSignUp(user)
   
     // Convert user object to JSON string
     const userJSON = JSON.stringify(user);
   
+    console.log(user)
     // Store the user details in local storage
     localStorage.setItem("user", userJSON);
   
-    alert("User signed up successfully!");
+
   
     // Reset the form fields
     setFirstName("");
-    setLastName("");
+     
     setEmail("");
     setPassword("");
     setPrivacyAccepted(false);
@@ -59,7 +83,7 @@ const SignUp = () => {
   return (
     <Box mt={200}>
      <Center>
-      <Heading as="h2" fontWeight="300" fontSize="20px" letterSpacing="-0.2px" >
+      <Heading as="h2" fontWeight="300" fontSize="20px" letterSpacing="-0.2px" mb={"5px"}>
         Register
       </Heading>
       </Center>
@@ -77,31 +101,18 @@ const SignUp = () => {
                   <FormControl marginBottom="10px">
                     <Input
                       type="text"
-                      placeholder="First Name"
+                      placeholder="Your Name"
                       w="100%"
                       bg="white"
                       borderColor="#d8dee4"
                       size="lg"
                       padding="10px"
                       borderRadius="30px"
-                      value={firstName}
+                      value={name}
                       onChange={(e) => setFirstName(e.target.value)}
                     />
                   </FormControl>
-                  <FormControl marginBottom="10px">
-                    <Input
-                      type="text"
-                      placeholder="Last Name"
-                      w="100%"
-                      bg="white"
-                      borderColor="#d8dee4"
-                      size="lg"
-                      padding="10px"
-                      borderRadius="30px"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                  </FormControl>
+                  
                   <FormControl marginBottom="10px">
                     <Input
                       type="text"
@@ -138,15 +149,17 @@ const SignUp = () => {
                     />
                     I have read and I accept the privacy policy
                   </label>
-
+                  {
+                    signup_status && <Text fontSize={"15px"} color={"green"}>{signup_status}</Text>
+                  }
                   <br />
                   <Button
                     type="submit"
                     bg="black"
                     border="none"
                     color="white"
-                    width="105%"
-                    padding="12px"
+                   
+                     
                     borderRadius="30px"
                     size="lg"
                     fontSize="15"
@@ -156,6 +169,8 @@ const SignUp = () => {
                       color: 'white',
                      transition: 'background-color 0.3s ease-in-out'
                     }}
+
+                    
                   >
                     Create my Account
                   </Button>
@@ -165,14 +180,14 @@ const SignUp = () => {
           </Card>
         </Stack>
       </Center>
-      <Center as="footer" mt="16">
-        <HStack spacing="4" pt="2">
+      <Center as="footer"  >
+        <HStack spacing="4" mt="10px">
           <Link
             className="fp"
             isExternal
             color="#515151"
             to="/login"
-            fontSize="xs"
+            fontSize="s"
             onClick={()=>{navigate("/login")}}
           >
             Already registered? Log in!
