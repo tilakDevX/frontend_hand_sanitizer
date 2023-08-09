@@ -137,7 +137,7 @@ function Checkout(props) {
             <Flex justifyContent={"end"}>
               <Button
                 mt="0.8rem"
-                _hover={"none"}
+                
                 bg="orange"
                 color="white"
                 onClick={ 
