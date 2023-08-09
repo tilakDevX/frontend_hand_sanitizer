@@ -8,6 +8,7 @@ function App() {
       <div>
         <Navabar />
         <AllRoutes />
+        
         <Footer />
       </div>
     </SearchProvider>
