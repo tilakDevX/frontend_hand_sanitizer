@@ -2,7 +2,7 @@ import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext } from "react";
 import { useEffect, useState } from "react";
-import "../Components/CSS/home.css"
+import "../Components/CSS/home.css";
 import HomeProductSlider from "./HomeProductSlider";
 import Feature from "./Feature";
 import img1 from "../assets/ALALALA.webp";
@@ -43,17 +43,27 @@ function Home(props) {
   return (
     <div>
       <Box className="home">
-          <Flex w={"100%"} flexDir={"column"}>
-        <Box className="title text-center" color={"white"}>
-            <Heading className="h">
-              Buy Once, use for <br />
-              life
+        <Flex w={"100%"} flexDir={"column"}>
+          <Box className="title text-center" color={"white"}>
+            <Heading
+              fontSize={{ base: "35px", md: "60px" }}
+              fontWeight={{ base: "600", md: "400" }}
+              lineHeight={{ base: ".98", md: "1" }}
+              letterSpacing={{ base: "-0.1px", md: "-0.1px" }}
+              margin="0"
+            >
+              Buy Once, use for <br /> life
             </Heading>
-            <Button pos={"initial"} className="homeBtn" m={"auto"}mt={"5%"} w={"50%"}>
-              ALL REFILLS
+            <Button
+               
+              m={"auto"}
+              mt={"5%"}
+              w={"50%"}
+            >
+              Buy Now
             </Button>
-        </Box>
-          </Flex>
+          </Box>
+        </Flex>
       </Box>
 
       <Flex
@@ -70,7 +80,11 @@ function Home(props) {
       </Flex>
 
       {/* Product Slider */}
-      <HomeProductSlider products={products} searchQuery={searchQuery} isLoading={isLoading} />
+      <HomeProductSlider
+        products={products}
+        searchQuery={searchQuery}
+        isLoading={isLoading}
+      />
 
       <Feature
         name="REFILLS"

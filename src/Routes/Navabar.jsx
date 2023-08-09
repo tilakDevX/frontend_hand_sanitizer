@@ -26,7 +26,7 @@ function Navabar(props) {
 
 
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} className="btns">
+            <MenuButton bg={"none"} as={Button} rightIcon={<ChevronDownIcon />} className="btns">
               Shop
             </MenuButton>
 
@@ -48,7 +48,7 @@ function Navabar(props) {
 
 
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} className="btns">
+            <MenuButton bg={"none"} as={Button} rightIcon={<ChevronDownIcon />} className="btns">
             Collection
             </MenuButton>
 
@@ -69,7 +69,7 @@ function Navabar(props) {
 
 
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} className="btns">
+            <MenuButton bg={"none"} as={Button} rightIcon={<ChevronDownIcon />} className="btns">
             About Us
             </MenuButton>
 
@@ -89,7 +89,7 @@ function Navabar(props) {
 
           {/* 4th link */}
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} className="btns">
+            <MenuButton  bg={"none"} as={Button} rightIcon={<ChevronDownIcon />} className="btns">
             Sobremesa Talks
             </MenuButton>
       </Menu>
