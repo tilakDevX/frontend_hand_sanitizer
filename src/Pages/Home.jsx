@@ -96,7 +96,7 @@ function Home(props) {
         dir={false}
       />
 
-      <Flex justifyContent={"center"} alignItems={"center"}>
+      <Flex justifyContent={"center"} alignItems={"center"} m={"1rem 0 1rem 0"}>
         <IconPage text="Clean Ingredients" icon={icon1} isSingle={false} />
         <IconPage text="Prebiotic Complex" icon={icon2} isSingle={false} />
         <IconPage text="Fresh Scents" icon={icon3} isSingle={false} />
@@ -118,6 +118,7 @@ function Home(props) {
         text="We support clean water projects"
         isSingle={true}
         icon={icon6}
+        m={"1rem 0 1rem 0"}
       />
       <Feature
         name=""
@@ -130,7 +131,7 @@ function Home(props) {
         dir={false}
       />
 
-      <Flex flexDir={"column"} alignItems={"center"}>
+      <Flex flexDir={"column"} alignItems={"center"} mt={"1.5rem"}>
         <Flex>
           <IconPage text="" icon={btmIcon1} isSingle={false} />
 
