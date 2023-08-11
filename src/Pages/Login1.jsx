@@ -43,7 +43,7 @@ const Login1 = () => {
 
   const postLogin = (value) => {
     try {
-      axios.post(`http://localhost:8500/user/login`, value).then((res) => {
+      axios.post(`https://puce-magpie-tie.cyclic.app/user/login`, value).then((res) => {
         console.log(res);
 
         localStorage.setItem("token", res.data.token)

@@ -31,7 +31,7 @@ const SignUp = () => {
 
   const postSignUp = (value)=>{
     try {
-      axios.post(`http://localhost:8500/user/signup`, value).then((res)=>{
+      axios.post(`https://puce-magpie-tie.cyclic.app/user//signup`, value).then((res)=>{
         console.log(res)
         setSignupStatus(res.data.message);
 
