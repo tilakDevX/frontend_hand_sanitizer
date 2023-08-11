@@ -71,7 +71,7 @@ const Footer = () => {
         </Box>
         <Box width={"30%"} m={"auto"}>
           <Flex flexDir={"column"}>
-            <Text>Ready to stay in touch ?</Text>
+            <Text color={"red"}>Ready to stay in touch ?</Text>
 
             <Input
               type="email"
