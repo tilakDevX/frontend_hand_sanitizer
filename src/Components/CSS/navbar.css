@@ -1,24 +1,26 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&family=Roboto:ital,wght@0,100;0,300;0,700;1,300&display=swap');
 
-*{
+* {
 
   box-sizing: border-box;
   font-family: 'Raleway', sans-serif;
 }
-.header{
+
+.header {
   position: fixed;
   top: 0;
   width: 100%;
-  background:white;
+  background: white;
   z-index: 2;
 }
-.navbar{
+
+.navbar {
   /* display: flex; */
   text-align: center;
   padding-bottom: 15px;
 }
-.link{
+
+.link {
   text-decoration: none;
   color: #000000;
   cursor: pointer;
@@ -26,55 +28,58 @@
   margin: 5px 0;
 }
 
-.link:hover, .btns:hover{
+.link:hover,
+.btns:hover {
   text-decoration: underline;
 }
-.btns{
-  border:none;
-   background: none; 
-  cursor:pointer;
+
+.btns {
+  border: none;
+  background: none;
+  cursor: pointer;
   font-weight: 500;
 }
+
 .menuItems.open {
-    width: 100%;
-    
-    margin-top: 15px;
-  }
+  width: 100%;
 
-  .menuItems {
-    display: block;
-  }
-  .open {
-    width: 100%;
-    
-  }
-
-.toggleButton{
-    display: none;
+  margin-top: 15px;
 }
 
-.list{
+.menuItems {
+  display: block;
+}
+
+.open {
+  width: 100%;
+
+}
+
+.toggleButton {
+  display: none;
+}
+
+.list {
   background: white;
-  padding:15px;
+  padding: 15px;
 }
 
-@media (max-width:749px){
+@media (max-width:749px) {
 
-    .toggleButton{
-        display: block;
-        top :95px;
-        position: fixed;
-        border: none;
-        background: none;
-        font-size: 25px;
-        margin-left: 10px;
+  .toggleButton {
+    display: block;
+    border: none;
+    background: none;
+    font-size: 25px;
 
-    }
-    .open {
-        display: none;
-        
-      }
-      
-      
-    
+
+  }
+
+  .open {
+    display: none;
+
+  }
+
+
+
 }

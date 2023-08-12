@@ -20,17 +20,13 @@ import btmIcon2 from "../assets/btmIcon-2.jpg";
 import btmIcon3 from "../assets/btmIcon-3.jpg";
 import btmIcon4 from "../assets/btmIcon-4.jpg";
 import btmIcon5 from "../assets/bmtIcon-5.jpg";
-import { SearchContext } from "./SearchContext";
 
 function Home(props) {
   let [products, setProduct] = useState([]);
   let [isLoading, setLoading] = useState(true);
-  const { searchQuery } = useContext(SearchContext);
 
   // https://sanitizer-5qvt.onrender.com/products
   useEffect(() => {
-
-
     axios
       .get(`https://puce-magpie-tie.cyclic.app/products`)
       .then((res) => {
@@ -44,6 +40,8 @@ function Home(props) {
   }, []);
 
   return (
+
+    
     <div>
       <Box className="home">
         <Flex w={"100%"} flexDir={"column"}>
@@ -57,14 +55,7 @@ function Home(props) {
             >
               Buy Once, use for <br /> life
             </Heading>
-            <Button
-               
-              m={"auto"}
-              mt={"5%"}
-              w={"50%"}
-              bg={"black"}
-              color={"white"}
-            >
+            <Button m={"auto"} mt={"5%"} w={"50%"} bg={"black"} color={"white"}>
               Buy Now
             </Button>
           </Box>
@@ -85,11 +76,7 @@ function Home(props) {
       </Flex>
 
       {/* Product Slider */}
-      <HomeProductSlider
-        products={products}
-        searchQuery={searchQuery}
-        isLoading={isLoading}
-      />
+      <HomeProductSlider products={products} isLoading={isLoading} />
 
       <Feature
         name="REFILLS"
@@ -150,8 +137,6 @@ function Home(props) {
           can be sustainable, beautiful and handy like HAAN Pockets are, it’s
           just a lovely plus.”
         </Text>
-
-       
       </Flex>
     </div>
   );

@@ -1,18 +1,19 @@
 // import { Menu, MenuList } from "@chakra-ui/react";
-import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import "../Components/CSS/navbar.css";
+import React, { useContext } from "react";
 import { Button, Flex, Menu, MenuButton, MenuList, Link } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import NavHeader from "./NavHeader";
 import { useNavigate } from "react-router-dom";
+import { MyContext } from "../Components/Context/MyContext";
+import "../Components/CSS/navbar.css";
 // import { Link } from "react-router-dom";
 
 
 function Navabar(props) {
   const Navigate = useNavigate()
-  let [isMenuOpen, setIsMenuOpen] = useState(false);
+  // let [isMenuOpen, setIsMenuOpen] = useState(false);
+  const {isMenuOpen, setIsMenuOpen} = useContext(MyContext);
+
   const toggleButton = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -97,13 +98,7 @@ function Navabar(props) {
           {/* <Link className="link">Sobremesa Talks</Link> */}
         </div>
 
-        <button className="toggleButton" onClick={toggleButton} >
-          {isMenuOpen ? (
-            <FontAwesomeIcon icon={faXmark} />
-          ) : (
-            <FontAwesomeIcon icon={faBars} />
-          )}
-        </button>
+       
       </header>
     </div>
   );
