@@ -1,27 +1,26 @@
-import React from 'react'
- import Home from '../Pages/Home'
- import Product from '../Pages/Product'
-import  {Route , Routes} from "react-router-dom"
-import Login1 from '../Pages/Login1'
-import SignUp from '../Pages/Signup'
-import Checkout from "../Pages/Checkout"
-import Cart from "../Pages/Cart"
+import { Route, Routes } from "react-router-dom";
+import React from "react";
+import Home from "../Pages/Home";
+import Product from "../Pages/Product";
+import Login1 from "../Pages/Login1";
+import SignUp from "../Pages/Signup";
+import Checkout from "../Pages/Checkout";
+
+import AdminDashboard from "../Pages/AdminDashboard";
 const AllRoutes = () => {
   return (
-
     <div>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/product' element={<Product/>}  ></Route>
-        <Route path='/login' element={<Login1/>}  ></Route>
-        <Route path='/signup' element={<SignUp/>}></Route>
-         
-        <Route path='/checkout' element={<Checkout/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/product" element={<Product />}></Route>
+        <Route path="/login" element={<Login1 />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
-
     </div>
+  );
+};
 
-  )
-}
-
-export default AllRoutes
+export default AllRoutes;

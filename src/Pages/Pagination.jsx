@@ -1,15 +1,7 @@
 import React from 'react'
 import {
-    Button,
-    ButtonGroup,
-    Card,
-    CardBody,
-    CardFooter,
-    Divider,
-    Heading,
-    Image,
-    Stack,
-    Text,
+    Button
+    
   } from '@chakra-ui/react';
 
 const Pagination = ({totalPages , currentPage , handlePageChange}) => {
@@ -19,6 +11,7 @@ const Pagination = ({totalPages , currentPage , handlePageChange}) => {
             <Button
               key={index + 1}
               variant='solid'
+              m={"8px"}
               colorScheme={currentPage === index + 1 ? 'blue' : 'gray'}
               onClick={() => handlePageChange(index + 1)}
             >

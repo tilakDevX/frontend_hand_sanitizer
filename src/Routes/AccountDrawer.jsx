@@ -5,6 +5,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Text,
@@ -58,15 +59,30 @@ function AccountDrawer(props) {
                 <Text>Name: {user.name}</Text>
                 <Text>Email: {user.email}</Text>
                 <Button
-                onClick={() => {
-                   localStorage.removeItem("user");
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("token");
                     onClose(); // Close the drawer when the button is clicked
-                }}
-              >
-                LogOut
-              </Button>
+                  }}
+                >
+                  LogOut
+                </Button>
               </Box>
             )}
+
+            <DrawerFooter>
+              {user.role === "admin" && (
+                <Button
+                  onClick={() => {
+                    navigate("/admin");
+                    onClose();
+                  }}
+                  bgColor="#5B9A8B"
+                >
+                  Open Admin DashBoard
+                </Button>
+              )}
+            </DrawerFooter>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

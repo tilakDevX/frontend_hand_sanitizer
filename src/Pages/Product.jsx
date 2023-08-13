@@ -35,8 +35,8 @@ const Product = () => {
     
     const response = await fetch(apiUrl);
     const data = await response.json();
-    setData(data);
-    console.log(data.totalCount)
+    
+    // console.log(data.totalCount)
     setTotalProd(data.totalCount);
     setData(data.product);
     setLoading(false)
