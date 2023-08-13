@@ -14,6 +14,7 @@ import {
   Card,
   CardBody,
   Link,
+  Spinner,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -27,6 +28,8 @@ import axios from "axios";
 const Login1 = () => {
   // Define validation schema using Yup
   const navigate = useNavigate();
+  const [isLogin, setLogin] = useState(true)
+  const [ spinner, setSpinner] = useState(false)
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -44,16 +47,28 @@ const Login1 = () => {
   const postLogin = (value) => {
     try {
       axios.post(`https://puce-magpie-tie.cyclic.app/user/login`, value).then((res) => {
-        console.log(res);
+        // console.log(res);
 
         localStorage.setItem("token", res.data.token)
         setLoginStatus(res.data.message);
         
+        if(res.data.message===  "Login failed, invalid credentials" || "Please Sign Up, Before Sign in" ){
+            setLogin(true)
+        }
+        if(res.data.message === "Login successfully"){
+          setLogin(false)
+          setSpinner(true)
+          localStorage.setItem("user", JSON.stringify(res.data.user))
+          setTimeout(() => {
 
-        setTimeout(() => {
-          window.location.href = "/";
-          
-        }, 2000);
+            // console.log(res.data.user)
+            window.location.href = "/";
+
+             
+            
+            
+          }, 3000);
+        }
          
       });
     } catch (error) {
@@ -168,7 +183,7 @@ const Login1 = () => {
 
 
                         {
-                          login_status && <Text fontSize={"15px"} color={"green"}>{login_status}</Text>
+                          login_status && <Text fontSize={"15px"} color={isLogin ? "red" : "green"}>{login_status}</Text>
                         }
                         <Button
                           className="fp"
@@ -186,7 +201,11 @@ const Login1 = () => {
                         </Button>
                       </HStack>
 
-                      <Button
+                      {
+                        spinner  ? (
+                          <Center><Spinner /></Center>
+                        ) : (
+                          <Button
                         className="login"
                         type="submit"
                         bg="#161616"
@@ -205,6 +224,8 @@ const Login1 = () => {
                       >
                         Log in
                       </Button>
+                        )
+                      }
                     </Stack>
                   </Form>
                 )}

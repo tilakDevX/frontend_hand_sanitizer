@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -10,14 +11,23 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function AccountDrawer(props) {
   let { isOpen, onOpen, onClose } = useDisclosure();
   let btnRef = React.useRef();
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user")) || "";
 
   return (
     <>
-      <Button ref={btnRef} color={"black"} colorScheme={"transparent"} onClick={onOpen}>
+      <Button
+        ref={btnRef}
+        color={"black"}
+        colorScheme={"transparent"}
+        onClick={onOpen}
+      >
         Your Account
       </Button>
 
@@ -31,10 +41,32 @@ function AccountDrawer(props) {
 
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Your Name</DrawerHeader>
+          <DrawerHeader>Your Account Details</DrawerHeader>
 
           <DrawerBody>
-            <Text>Your Email</Text>
+            {user === "" ? (
+              <Button
+                onClick={() => {
+                  navigate("/login");
+                  onClose(); // Close the drawer when the button is clicked
+                }}
+              >
+                Login
+              </Button>
+            ) : (
+              <Box>
+                <Text>Name: {user.name}</Text>
+                <Text>Email: {user.email}</Text>
+                <Button
+                onClick={() => {
+                   localStorage.removeItem("user");
+                    onClose(); // Close the drawer when the button is clicked
+                }}
+              >
+                LogOut
+              </Button>
+              </Box>
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   Center,
+  Flex,
   FormControl,
   Heading,
   HStack,
@@ -150,7 +151,11 @@ const SignUp = () => {
                     I have read and I accept the privacy policy
                   </label>
                   {
-                    signup_status && <Text fontSize={"15px"} color={"green"}>{signup_status}</Text>
+                    signup_status && <Flex justifyContent={"space-evenly"}>
+                      <Text fontSize={"15px"} color={"green"}>{signup_status}</Text>
+                        <Link to="/login"  onClick={()=>{navigate("/login")}}>Go to login page</Link>
+                    
+                    </Flex>
                   }
                   <br />
                   <Button
