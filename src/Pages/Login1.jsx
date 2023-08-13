@@ -16,20 +16,20 @@ import {
   Link,
   Spinner,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+
 import Image1 from "../assets/facebook.png";
 import Image2 from "../assets/twitter.png";
 import Image3 from "../assets/google.png";
-import Image4 from "../assets/amazon.png";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Login1 = () => {
   // Define validation schema using Yup
   const navigate = useNavigate();
-  const [isLogin, setLogin] = useState(true)
-  const [ spinner, setSpinner] = useState(false)
+  const [isLogin, setLogin] = useState(true);
+  const [spinner, setSpinner] = useState(false);
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -37,7 +37,7 @@ const Login1 = () => {
     password: Yup.string().required("*Password is required"),
   });
 
-  const [login_status, setLoginStatus]  = useState("")
+  const [login_status, setLoginStatus] = useState("");
   // Define initial form values
   const initialValues = {
     email: "",
@@ -46,31 +46,30 @@ const Login1 = () => {
 
   const postLogin = (value) => {
     try {
-      axios.post(`https://puce-magpie-tie.cyclic.app/user/login`, value).then((res) => {
-        // console.log(res);
+      axios
+        .post(`https://puce-magpie-tie.cyclic.app/user/login`, value)
+        .then((res) => {
+          // console.log(res);
 
-        localStorage.setItem("token", res.data.token)
-        setLoginStatus(res.data.message);
-        
-        if(res.data.message===  "Login failed, invalid credentials" || "Please Sign Up, Before Sign in" ){
-            setLogin(true)
-        }
-        if(res.data.message === "Login successfully"){
-          setLogin(false)
-          setSpinner(true)
-          localStorage.setItem("user", JSON.stringify(res.data.user))
-          setTimeout(() => {
+          localStorage.setItem("token", res.data.token);
+          setLoginStatus(res.data.message);
 
-            // console.log(res.data.user)
-            window.location.href = "/";
-
-             
-            
-            
-          }, 3000);
-        }
-         
-      });
+          if (
+            res.data.message === "Login failed, invalid credentials" ||
+            "Please Sign Up, Before Sign in"
+          ) {
+            setLogin(true);
+          }
+          if (res.data.message === "Login successfully") {
+            setLogin(false);
+            setSpinner(true);
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+            setTimeout(() => {
+              // console.log(res.data.user)
+              window.location.href = "/";
+            }, 3000);
+          }
+        });
     } catch (error) {
       alert("An error ocurred while login");
       console.log("An error ocurred while login");
@@ -87,51 +86,23 @@ const Login1 = () => {
   };
 
   return (
-    <Box mt="200px">
-      <Center mb="1rem">
-        <Heading
-          as="h2"
-          fontWeight="300"
-          fontSize="20px"
-          letterSpacing="-0.2px"
-        >
-          Login
-        </Heading>
-      </Center>
-      <Center>
-        <Text>Please enter your e-mail and password</Text>
-      </Center>
-
-      <Center>
-        <Flex>
-          <HStack spacing="20">
-            <Center>
-              <Flex>
-                <HStack spacing="20">
-                  <button className="Social">
-                    <img width="40px" src={Image1} alt="" />
-                  </button>
-                  <button className="Social">
-                    <img width="60px" src={Image2} alt="" />
-                  </button>
-                  <button className="Social">
-                    <img width="40px" src={Image3} alt="" />
-                  </button>
-                  <button className="Social">
-                    <img width="40px" src={Image4} alt="" />
-                  </button>
-                </HStack>
-              </Flex>
-            </Center>
-          </HStack>
-        </Flex>
-      </Center>
+    <Box mt="200px" >
+       
 
       <Center>
         <Stack spacing="4">
           <VStack as="header" spacing="6" mt="8"></VStack>
-          <Card w="400px">
+          <Card w="400px" boxShadow ={"rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"} p={"10px"} borderRadius={"8px"}>
             <CardBody>
+              <Heading
+                as="h1"
+                fontWeight="600"
+                fontSize="20px"
+                letterSpacing="-0.2px"
+              >
+                Login
+              </Heading>
+              <Text m={"10px"}>Please enter your e-mail and password</Text>
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -180,11 +151,14 @@ const Login1 = () => {
                         />
                       </FormControl>
                       <HStack justifyContent="end">
-
-
-                        {
-                          login_status && <Text fontSize={"15px"} color={isLogin ? "red" : "green"}>{login_status}</Text>
-                        }
+                        {login_status && (
+                          <Text
+                            fontSize={"15px"}
+                            color={isLogin ? "red" : "green"}
+                          >
+                            {login_status}
+                          </Text>
+                        )}
                         <Button
                           className="fp"
                           as="a"
@@ -201,31 +175,31 @@ const Login1 = () => {
                         </Button>
                       </HStack>
 
-                      {
-                        spinner  ? (
-                          <Center><Spinner /></Center>
-                        ) : (
-                          <Button
-                        className="login"
-                        type="submit"
-                        bg="#161616"
-                        color="white"
-                        width="105%"
-                        padding="10px"
-                        borderRadius="30px"
-                        size="lg"
-                        fontSize="15"
-                        isLoading={isSubmitting}
-                        _hover={{
-                          bg: "#7F7F7F",
-                          color: "white",
-                          transition: "background-color 0.3s ease-in-out",
-                        }}
-                      >
-                        Log in
-                      </Button>
-                        )
-                      }
+                      {spinner ? (
+                        <Center>
+                          <Spinner />
+                        </Center>
+                      ) : (
+                        <Button
+                          className="login"
+                          type="submit"
+                          bg="#161616"
+                          color="white"
+                          width="105%"
+                          padding="10px"
+                          borderRadius="30px"
+                          size="lg"
+                          fontSize="15"
+                          isLoading={isSubmitting}
+                          _hover={{
+                            bg: "#7F7F7F",
+                            color: "white",
+                            transition: "background-color 0.3s ease-in-out",
+                          }}
+                        >
+                          Log in
+                        </Button>
+                      )}
                     </Stack>
                   </Form>
                 )}
@@ -247,6 +221,28 @@ const Login1 = () => {
             </HStack>
           </Center>
         </Stack>
+      </Center>
+
+      <Center>
+        <Flex>
+          <HStack spacing="10">
+            <Center>
+              <Flex>
+                <HStack spacing="20">
+                  <button className="Social">
+                    <img width="40px" src={Image1} alt="" />
+                  </button>
+                  <button className="Social">
+                    <img width="60px" src={Image2} alt="" />
+                  </button>
+                  <button className="Social">
+                    <img width="40px" src={Image3} alt="" />
+                  </button>
+                </HStack>
+              </Flex>
+            </Center>
+          </HStack>
+        </Flex>
       </Center>
     </Box>
   );
