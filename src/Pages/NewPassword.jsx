@@ -4,7 +4,6 @@ import {
   Heading,
   Text,
   Center,
-  HStack,
   FormControl,
   Input,
   Button,
@@ -12,77 +11,94 @@ import {
   VStack,
   Card,
   CardBody,
-  Link,
   Spinner,
+ 
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+ 
 
-const Login1 = () => {
-  // Define validation schema using Yup
+const NewPassword = () => {
+  
   const navigate = useNavigate();
-  const [isLogin, setLogin] = useState(true);
+  
   const [spinner, setSpinner] = useState(false);
+ 
+  const [login_status, setLoginStatus] = useState("");
+  const [Color, setColor] = useState(false);
+   
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
       .required("*Email is required"),
     password: Yup.string().required("*Password is required"),
+    newpassword: Yup.string().required("*Confirm Password is required"),
   });
 
-  const [login_status, setLoginStatus] = useState("");
-  // Define initial form values
+   
   const initialValues = {
     email: "",
     password: "",
-  };
-
-  const postLogin = (value) => {
-    try {
-      axios
-        .post(`https://puce-magpie-tie.cyclic.app/user/login`, value)
-        .then((res) => {
-          // console.log(res);
-
-          localStorage.setItem("token", res.data.token);
-          setLoginStatus(res.data.message);
-
-          if (
-            res.data.message === "Login failed, invalid credentials" ||
-            "Please Sign Up, Before Sign in"
-          ) {
-            setLogin(true);
-          }
-          if (res.data.message === "Login successfully") {
-            setLogin(false);
-            setSpinner(true);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-            setTimeout(() => {
-              // console.log(res.data.user)
-              window.location.href = "/";
-            }, 3000);
-          }
-        });
-    } catch (error) {
-      alert("An error ocurred while login");
-      console.log("An error ocurred while login");
-      console.error(error);
-    }
+    newpassword: "",
   };
 
   // Handle form submission
-  const handleSubmit = (values, { setSubmitting }) => {
-    postLogin(values);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const newPassword = values.password;  
+      const confirmNewPassword = values.newpassword;  
+      const email = values.email;  
 
-    // Reset the form
+      
+      if (newPassword !== confirmNewPassword) {
+
+        console.log("New password and confirm new password do not match");
+        
+        setLoginStatus("Password do not match.")
+        setColor(false)
+        return; 
+      }
+
+      
+      const response = await axios.post(
+        "https://puce-magpie-tie.cyclic.app/user/newpassword",
+        {
+          email,
+          password: newPassword,
+        }
+      );
+
+     
+      if (response.data.message === "Password updated successfully.") {
+
+        setLoginStatus("Password updated successfully.")
+        setSpinner(true)
+        setColor(true)
+         
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+        console.log("Password updated:", response.data.message);
+      }
+      showStatus(true)
+    } catch (error) {
+        
+        showStatus(true)
+      console.log("An error occurred:", error);
+     
+    }
+
+   
+    
     setSubmitting(false);
   };
 
   return (
     <Box mt="200px">
       <Center>
+         
         <Stack spacing="4">
           <VStack as="header" spacing="6" mt="8"></VStack>
           <Card
@@ -98,9 +114,9 @@ const Login1 = () => {
                 fontSize="20px"
                 letterSpacing="-0.2px"
               >
-                Login
+                New Your New Password
               </Heading>
-              <Text m={"10px"}>Please enter your e-mail and password</Text>
+              <Text m={"10px"}>Please enter your e-mail and new password</Text>
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -133,7 +149,7 @@ const Login1 = () => {
                         <Field
                           type="password"
                           name="password"
-                          placeholder="Password"
+                          placeholder="New Password"
                           as={Input}
                           w="100%"
                           bg="white"
@@ -148,33 +164,33 @@ const Login1 = () => {
                           color="#515151"
                         />
                       </FormControl>
-                      <HStack justifyContent="end">
-                        {login_status && (
-                          <Text
-                            fontSize={"15px"}
-                            color={isLogin ? "red" : "green"}
-                          >
-                            {login_status}
-                          </Text>
-                        )}
-                        <Button
-                          className="fp"
-                          as="a"
-                          href="#"
-                          variant="link"
-                          size="xs"
-                          fontWeight="500"
-                          fontSize="15"
-                          display="flex"
-                          alignItems="end"
+                      <FormControl marginBottom="10px">
+                        <Field
+                          type="password"
+                          name="newpassword"
+                          placeholder="Confirm Password"
+                          as={Input}
+                          w="100%"
+                          bg="white"
+                          borderColor="#d8dee4"
+                          size="lg"
+                          padding="10px"
+                          borderRadius="30px"
+                        />
+                        <ErrorMessage
+                          name="newpassword"
+                          component="div"
                           color="#515151"
-
-                          onClick={() => navigate("/newpass")}
-                        >
-                          Forgot password ?
-                        </Button>
-                      </HStack>
-
+                        />
+                      </FormControl>
+                      {login_status && (
+                         <Text
+                         fontSize={"15px"}
+                         color={Color ? "green" : "red"}
+                       >
+                         {login_status  }
+                       </Text>
+                        )}
                       {spinner ? (
                         <Center>
                           <Spinner />
@@ -197,7 +213,7 @@ const Login1 = () => {
                             transition: "background-color 0.3s ease-in-out",
                           }}
                         >
-                          Log in
+                          Set New Password
                         </Button>
                       )}
                     </Stack>
@@ -206,24 +222,10 @@ const Login1 = () => {
               </Formik>
             </CardBody>
           </Card>
-
-          <Center as="footer">
-            <HStack spacing="4" pt="2">
-              <Link
-                onClick={() => navigate("/signup")}
-                className="fp"
-                isExternal
-                color="#515151"
-                fontSize="s"
-              >
-                Don't have an account ?
-              </Link>
-            </HStack>
-          </Center>
         </Stack>
       </Center>
     </Box>
   );
 };
 
-export default Login1;
+export default NewPassword;

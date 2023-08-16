@@ -7,6 +7,7 @@ import SignUp from "../Pages/Signup";
 import Checkout from "../Pages/Checkout";
 
 import AdminDashboard from "../Pages/AdminDashboard";
+import NewPassword from "../Pages/NewPassword";
 const AllRoutes = () => {
   return (
     <div>
@@ -18,6 +19,7 @@ const AllRoutes = () => {
 
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/newpass" element={<NewPassword />} />
       </Routes>
     </div>
   );
