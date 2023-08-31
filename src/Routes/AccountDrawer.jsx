@@ -11,6 +11,8 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +31,7 @@ function AccountDrawer(props) {
         colorScheme={"transparent"}
         onClick={onOpen}
       >
-        Your Account
+       <FontAwesomeIcon icon={faUser} fontSize={"20px"}/>
       </Button>
 
       <Drawer
