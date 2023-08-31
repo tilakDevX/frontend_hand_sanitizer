@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faCartPlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 import Pagination from "./Pagination";
  
@@ -189,8 +189,8 @@ const Product = () => {
                       </Text>
                     </Stack>
                   </CardBody>
-                  <CardFooter ml={10}>
-                    <ButtonGroup spacing="2">
+                  <CardFooter >
+                    <ButtonGroup spacing="20" m={"auto"}>
                       <Button
                         variant="solid"
                         colorScheme="blue"
@@ -208,8 +208,9 @@ const Product = () => {
                           navigate("/checkout");
                           localStorage.setItem("cart", Product._id);
                         }}
+                         
                       >
-                        Add to cart
+                        <FontAwesomeIcon icon={faCartPlus} fontSize={"20px"} />
                       </Button>
                     </ButtonGroup>
                   </CardFooter>
