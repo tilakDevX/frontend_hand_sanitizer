@@ -152,7 +152,7 @@ function NavHeader(props) {
 
         <Flex alignItems={"center"}>
           <Link to={"/checkout"}>
-            <FontAwesomeIcon icon={faBagShopping} color="black" />
+            <FontAwesomeIcon icon={faBagShopping} color="black" fontSize={"20"}/>
           </Link>
           <AccountDrawer />
         </Flex>
