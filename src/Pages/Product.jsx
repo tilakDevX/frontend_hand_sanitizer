@@ -11,6 +11,7 @@ import {
   InputLeftElement,
   Select,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 
 import {
@@ -32,6 +33,7 @@ import Pagination from "./Pagination";
  
 const Product = () => {
   const navigate = useNavigate();
+  const toast = useToast()
   const limit = 8;
 
   const [data, setData] = useState([]);
@@ -206,8 +208,14 @@ const Product = () => {
                         variant="ghost"
                         colorScheme="blue"
                         onClick={() => {
-                          navigate("/checkout");
+                          // navigate("/checkout");
                           localStorage.setItem("cart", Product._id);
+                          toast({
+                            title: 'Product added to cart',
+                            status: 'success',
+                            duration: 3000,
+                            isClosable: true,
+                          })
                         }}
                          
                       >
