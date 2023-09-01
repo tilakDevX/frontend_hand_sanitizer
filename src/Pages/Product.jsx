@@ -97,7 +97,8 @@ const Product = () => {
       <div
         style={{
           display: "flex",
-          marginTop: "180px",
+          marginTop: "200px",
+          marginBottom: "40px",
           justifyContent: "space-evenly",
         }}
       >
