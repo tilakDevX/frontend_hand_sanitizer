@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -19,12 +19,25 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+  import Cookies from 'js-cookie';
 
 const Login1 = () => {
   // Define validation schema using Yup
   const navigate = useNavigate();
   const [isLogin, setLogin] = useState(true);
   const [spinner, setSpinner] = useState(false);
+
+
+
+
+  useEffect(()=>{
+    const authToken = Cookies.get('authToken');
+    console.log(authToken)
+    localStorage.setItem("authToken",  (authToken));
+  },[])
+
+
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
