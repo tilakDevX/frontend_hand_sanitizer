@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,13 +27,18 @@ import {
 } from "@chakra-ui/react";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartPlus,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Pagination from "./Pagination";
- 
+import { MyContext } from "../Components/Context/MyContext";
+import axios from "axios";
+
 const Product = () => {
   const navigate = useNavigate();
-  const toast = useToast()
+  const toast = useToast();
   const limit = 8;
 
   const [data, setData] = useState([]);
@@ -44,6 +49,7 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  const { setcartStatus, cartStatus } = useContext(MyContext);
   // Use lodash's debounce to create a debounced version of the search function
   const fetchData = async (url) => {
     try {
@@ -90,6 +96,33 @@ const Product = () => {
     const { value } = event.target;
     setSearch(value);
     debouncedSearch(value);
+  };
+
+  const AddCart = (product) => {
+
+   
+    const token = localStorage.getItem("token") || "";
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    try {
+      axios
+        .post("https://puce-magpie-tie.cyclic.app/user/cart/add", product, {
+          headers,
+        })
+        .then((res) => {
+          console.log(res.data.message);
+          setcartStatus("success");
+          console.log(cartStatus);
+        });
+    } catch (error) {
+      setcartStatus("error");
+      console.error(error);
+    }
+    console.log(cartStatus);
+
   };
   useEffect(() => {
     fetchInitialData();
@@ -192,7 +225,7 @@ const Product = () => {
                       </Text>
                     </Stack>
                   </CardBody>
-                  <CardFooter >
+                  <CardFooter>
                     <ButtonGroup spacing="20" m={"auto"}>
                       <Button
                         variant="solid"
@@ -209,15 +242,21 @@ const Product = () => {
                         colorScheme="blue"
                         onClick={() => {
                           // navigate("/checkout");
-                          localStorage.setItem("cart", Product._id);
-                          toast({
-                            title: 'Product added to cart',
-                            status: 'success',
-                            duration: 3000,
-                            isClosable: true,
-                          })
+
+                          AddCart(Product);
+
+                           setTimeout(()=>{
+                            toast({
+                              title: "Product added to cart",
+                              status: `${cartStatus}`,
+                              duration: 3000,
+                              isClosable: true,
+                            });
+                           }, 2000)
+                            
+                             
+                          
                         }}
-                         
                       >
                         <FontAwesomeIcon icon={faCartPlus} fontSize={"20px"} />
                       </Button>
