@@ -8,6 +8,9 @@ import Checkout from "../Pages/Checkout";
 
 import AdminDashboard from "../Pages/AdminDashboard";
 import NewPassword from "../Pages/NewPassword";
+import Cart from "../Components/Cart";
+ 
+
 const AllRoutes = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
@@ -24,6 +27,8 @@ const AllRoutes = () => {
           <Route path="/admin" element={<AdminDashboard />} />
         )  }
         <Route path="/newpass" element={<NewPassword />} />
+        <Route path="/cart" element={<Cart />} />
+
       </Routes>
     </div>
   );
