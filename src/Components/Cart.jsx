@@ -1,13 +1,12 @@
-import { Heading } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 
 function Cart(props) {
-    return (
-        <Heading>
-            this is cart component
-            
-        </Heading>
-    );
+  return (
+    <Box mt={"13rem"}>
+      cart
+    </Box>
+  );
 }
 
 export default Cart;
