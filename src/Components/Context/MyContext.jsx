@@ -7,7 +7,7 @@ const MyContext = createContext();
 const MyContextProvider = ({children})=>{
 
     let [isMenuOpen, setIsMenuOpen] = useState(false);
-    let [cartStatus, setcartStatus] = useState("success");
+    
 
 
     // const toggleButton = () => {
@@ -18,8 +18,7 @@ const MyContextProvider = ({children})=>{
     const contextValue ={
         isMenuOpen,
         setIsMenuOpen, 
-        cartStatus,
-        setcartStatus
+        
     }
 
     return (
