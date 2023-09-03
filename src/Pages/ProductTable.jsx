@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Pagination from "./Pagination";
-import axios from "axios";
+
 import DeleteProduct from "./DeleteProduct";
 import UpdateProduct from "./UpdateProduct";
 
@@ -99,10 +99,12 @@ function ProductTable(props) {
       )}
 
       {update_item.status && (
-
         <Center>
-
-            <UpdateProduct product={update_item.product} setData={setData} setUpdate={setUpdate} />
+          <UpdateProduct
+            product={update_item.product}
+            setData={setData}
+            setUpdate={setUpdate}
+          />
         </Center>
       )}
 
