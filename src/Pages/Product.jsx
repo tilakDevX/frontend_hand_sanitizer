@@ -249,7 +249,7 @@ const Product = () => {
                             toast({
                               title: "Product added to cart",
                               status: `${cartStatus}`,
-                              duration: 3000,
+                              duration: 4000,
                               isClosable: true,
                             });
                            }, 2000)
