@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,8 +33,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Pagination from "./Pagination";
-import { MyContext } from "../Components/Context/MyContext";
+
 import axios from "axios";
+
+let token = localStorage.getItem("token") || "";
+let cart = "";
+if (token === "") {
+  cart = "Please Login";
+} else {
+  cart = "success";
+}
 
 const Product = () => {
   const navigate = useNavigate();
@@ -48,8 +56,8 @@ const Product = () => {
   const [filterOption, setFilterOption] = useState("");
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  let [cartStatus, setcartStatus] = useState(cart);
 
-  const { setcartStatus, cartStatus } = useContext(MyContext);
   // Use lodash's debounce to create a debounced version of the search function
   const fetchData = async (url) => {
     try {
@@ -99,10 +107,6 @@ const Product = () => {
   };
 
   const AddCart = (product) => {
-
-   
-    const token = localStorage.getItem("token") || "";
-
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -113,16 +117,30 @@ const Product = () => {
           headers,
         })
         .then((res) => {
-          console.log(res.data.message);
-          setcartStatus("success");
-          console.log(cartStatus);
+          // console.log(res.data.message);
+          setcartStatus(res.data.message);
+          // console.log(cartStatus);
         });
     } catch (error) {
       setcartStatus("error");
       console.error(error);
     }
-    console.log(cartStatus);
 
+    toast({
+      position: "bottom-left",
+      render: () => (
+        <Box
+          color="white"
+          borderRadius={"10px"}
+          p={3}
+          bg={cartStatus === "success" ? "green.500" : "red.500"}
+        >
+          Status: {cartStatus}
+        </Box>
+      ),
+    });
+
+    
   };
   useEffect(() => {
     fetchInitialData();
@@ -244,18 +262,6 @@ const Product = () => {
                           // navigate("/checkout");
 
                           AddCart(Product);
-
-                           setTimeout(()=>{
-                            toast({
-                              title: "Product added to cart",
-                              status: `${cartStatus}`,
-                              duration: 4000,
-                              isClosable: true,
-                            });
-                           }, 2000)
-                            
-                             
-                          
                         }}
                       >
                         <FontAwesomeIcon icon={faCartPlus} fontSize={"20px"} />
