@@ -20,11 +20,22 @@ import btmIcon2 from "../assets/btmIcon-2.jpg";
 import btmIcon3 from "../assets/btmIcon-3.jpg";
 import btmIcon4 from "../assets/btmIcon-4.jpg";
 import btmIcon5 from "../assets/bmtIcon-5.jpg";
+import { useNavigate } from "react-router-dom";
 
 function Home(props) {
   let [products, setProduct] = useState([]);
   let [isLoading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate()
 
+  
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   // https://sanitizer-5qvt.onrender.com/products
   useEffect(() => {
     axios
@@ -40,8 +51,6 @@ function Home(props) {
   }, []);
 
   return (
-
-    
     <div>
       <Box className="home">
         <Flex w={"100%"} flexDir={"column"}>
@@ -55,9 +64,23 @@ function Home(props) {
             >
               Buy Once, use for <br /> life
             </Heading>
-            <Button m={"auto"} mt={"5%"} w={"50%"} bg={"black"} color={"white"}>
+            <Box
+              as={Button}
+              m={"auto"}
+              mt={"5%"}
+              w={"50%"}
+              bg={isHovered ? "#ffffff" : "black"} 
+              color={isHovered ? "black" : "#ffffff"}  
+              borderRadius={"40px"}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+
+              onClick={()=>{
+                navigate("/product")
+              }}
+            >
               Buy Now
-            </Button>
+            </Box>
           </Box>
         </Flex>
       </Box>
