@@ -25,7 +25,7 @@ const Footer = () => {
         mb={"2rem"}
       />
 
-      <Flex m={"0 2rem"} flexDir={isSmallScreen && "column"}>
+      <Flex m={"0 2rem"} flexDir={isSmallScreen && "column"} pb={"50px"}>
         <Box width={"30%"} m={"auto"}>
           <Flex flexDir={"column"} alignContent={"center"} textAlign={"center"}>
             <img
@@ -47,7 +47,7 @@ const Footer = () => {
             </Text>
           </Flex>
         </Box>
-        <Box width={"30%"} m={"auto"}>
+        <Box width={isSmallScreen ? "100%" : "30%"} m={"auto"}>
           <Flex justifyContent={"space-evenly"} textAlign={"left"}>
             <VStack spacing={1}>
               <Links text="Newsletter" />
@@ -71,7 +71,7 @@ const Footer = () => {
         </Box>
         <Box width={"30%"} m={"auto"}>
           <Flex flexDir={"column"}>
-            <Text color={"red"}>Ready to stay in touch ?</Text>
+            <Text  >Ready to stay in touch ?</Text>
 
             <Input
               type="email"
