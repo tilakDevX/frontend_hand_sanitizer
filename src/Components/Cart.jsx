@@ -1,7 +1,9 @@
-import { CloseIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Center,
+  Divider,
   Flex,
   Image,
   Spinner,
@@ -13,9 +15,11 @@ import {
   Th,
   Thead,
   Tr,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const token = localStorage.getItem("token") || "";
 
@@ -26,6 +30,20 @@ const headers = {
 function Cart(props) {
   const [cart, setCart] = useState([]);
   const [spin, setSpinner] = useState(true);
+  const [subTotal, setSubTotal] = useState(0);
+
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+
+  const [isLargerThan820] = useMediaQuery("(max-width: 1050px)");
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   const hanldeDeleteCart = (id) => {
     console.log(id);
@@ -42,6 +60,10 @@ function Cart(props) {
       console.log(error);
     }
   };
+
+  const calculateSubTotal = (cartData) => {
+    return cartData.reduce((acc, element) => acc + element.total, 0);
+  };
   const GetCart = () => {
     try {
       axios
@@ -50,22 +72,59 @@ function Cart(props) {
         })
         .then((res) => {
           console.log(res.data);
-          setCart(res.data);
+
+          const cartData = res.data;
+          // Calculate subTotal
+          let calculatedSubTotal = 0;
+          if (cartData.length !== 0) {
+            calculatedSubTotal = cartData.reduce(
+              (acc, element) => acc + element.total,
+              0
+            );
+          }
+
+          // Update subTotal state
+          setSubTotal(calculatedSubTotal.toFixed(2));
+          setCart(cartData);
           setSpinner(false);
         });
     } catch (error) {
       console.log(error);
     }
-    console.log(cart);
   };
 
+  const handleCount = (productId, value) => {
+    // Create a copy of the cart array
+    const updatedCart = [...cart];
+
+    // Find the index of the product in the cart
+    const productIndex = updatedCart.findIndex(
+      (element) => element._id === productId
+    );
+
+    if (productIndex !== -1) {
+      updatedCart[productIndex].quantity += value;
+
+      updatedCart[productIndex].total =
+        updatedCart[productIndex].quantity *
+        updatedCart[productIndex].product.finalPrice;
+    }
+    const updatedSubTotal = calculateSubTotal(updatedCart);
+    setSubTotal(updatedSubTotal.toFixed(2));
+
+    setCart(updatedCart);
+  };
   useEffect(() => {
     GetCart();
+    // console.log(subTotal);
   }, []);
 
   return (
-    <Flex m={"auto"} mt={"13rem"} justifyContent={"space-evenly"}>
-      <Box width={"45%"}>
+    <Flex m={"auto"} mt={"13rem"} justifyContent={"space-evenly"} alignItems = "center" flexDir={isLargerThan820 ? "column" : "row"}>
+      <Box width={isLargerThan820 ? "65%" : "45%"}
+      
+      mb={isLargerThan820 && "3rem"}
+      >
         {spin ? (
           <Center>
             {" "}
@@ -97,15 +156,37 @@ function Cart(props) {
                               .join(" ")}
                           </Text>
                         </Td>
-                        <Td>1</Td>
-                        <Td>1</Td>
+                        <Td>
+                          <AddIcon
+                            cursor={"pointer"}
+                            onClick={() => {
+                              handleCount(element._id, 1);
+                            }}
+                          />
+                          {element.quantity}
+                          <MinusIcon
+                            style={{
+                              pointerEvents:
+                                element.quantity === 1 ? "none" : "auto",
+                            }}
+                            cursor={"pointer"}
+                            onClick={() => {
+                              if (element.quantity !== 1) {
+                                handleCount(element._id, -1);
+                              }
+                            }}
+                          />
+                        </Td>
+                        <Td>{element.total.toFixed(2)} €</Td>
                         <Td
                           cursor={"pointer"}
                           onClick={() => {
                             hanldeDeleteCart(element._id);
                           }}
                         >
-                          <CloseIcon />
+                          <Button>
+                            <CloseIcon />
+                          </Button>
                         </Td>
                       </Tr>
                     );
@@ -115,11 +196,45 @@ function Cart(props) {
           </TableContainer>
         )}
       </Box>
-      <Box bg={"green"} width={"30%"} height={"20vh"}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem,
-          sunt.
-        </p>
+      <Box width={ isLargerThan820 ? "40%" : "20%"} height={"20vh"}>
+        <Text fontSize={"12px"}>SPEND 8,60€ MORE TO RECEIVE FREE SHIPPING</Text>
+
+        <Divider
+          width={"100%"}
+          borderWidth="3.5px"
+          borderRadius={"10px"}
+          opacity={1}
+        />
+        {spin ? (
+          <Spinner />
+        ) : (
+          <Text
+            textAlign={"center"}
+            mt={"5%"}
+            fontSize={"20px"}
+            fontWeight={"500"}
+          >
+            Subtotal: {subTotal} €
+          </Text>
+        )}
+        <Center>
+          <Box
+            as={Button}
+            w={"100%"}
+            m={"auto"}
+            mt={"8%"}
+            bg={isHovered ? "#ffffff" : "black"}
+            color={isHovered ? "black" : "#ffffff"}
+            borderRadius={"40px"}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={() => {
+              navigate("/checkout");
+            }}
+          >
+            Checkout
+          </Box>
+        </Center>
       </Box>
     </Flex>
   );
