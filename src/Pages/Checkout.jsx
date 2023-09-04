@@ -1,205 +1,138 @@
-import React, { useState, useEffect } from "react";
-import { Input, Link, Radio, Select } from "@chakra-ui/react";
-import axios from "axios";
+import React, { useState } from "react";
 import {
+  Input,
+  Radio,
+  Select,
   Box,
   Text,
   Flex,
   Heading,
-  Image,
   Button,
   Stack,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import ThankYou from "./ThankYou";
 
 function Checkout(props) {
-  const [cartItems, setCartItems] = useState([]);
-  const [id, setId]  = useState("")
+  const [id, setId] = useState("");
   const [flag, setFlag] = useState(false);
-  const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
-    // Calculate the cart total whenever the cart items change
-    calculateCartTotal();
-  }, [cartItems, quantity]);
-
- 
-  useEffect(() => {
-
-
-    const buy = localStorage.getItem("buy");
-    axios.get(`https://puce-magpie-tie.cyclic.app/products/${buy}`).then((res) => {
-      console.log(res.data);
-      setCartItems(res.data);
-    });
-  }, []);
-
-  const calculateCartTotal = () => {
-    let total = 0;
-    for (const itemId in cartItems) {
-      if (cartItems.hasOwnProperty(itemId)) {
-        const item = cartItems[itemId];
-        total += item.MRP * item.quantity;
-      }
-    }
-    
-  };
-
-  const handleQuantity = (value) => {
-    const newQuantity = Math.max(1, quantity + value);
-    setQuantity(newQuantity);
-  };
-
-  const genrateId =()=>{
-
-    const timestamp = Date.now(); // Current timestamp in milliseconds
-    const randomNum = Math.floor(Math.random() * 10000); // Random number between 0 and 9999
+  const generateId = () => {
+    const timestamp = Date.now();
+    const randomNum = Math.floor(Math.random() * 10000);
     const orderID = `${timestamp}-${randomNum}`;
-      setId(orderID)
+    setId(orderID);
     setFlag(true);
+    console.log("click") ;
+  };
+
+  const handleSubmit = ()=>{
+    event.preventDefault();
+    generateId();
   }
-
   return (
-    <Box border="2px solid gray" m="0.3rem" mt={"12rem"}>
-      <Flex borderBottom={"2px solid gray"}>
-        <Box w="40%" p="0.4rem" borderRight={"2px solid gray"}>
-          <HamburgerIcon />
-        </Box>
-        <Flex w="60%" p="0.4rem" justifyContent={"space-between"}>
-          <Text>CHECKOUT</Text>
-          <CloseIcon />
-        </Flex>
-      </Flex>
+    <Flex
+      w={"50%"}
+      p={"15px"}
+      m={"auto"}
+      mt={"12rem"}
+      justifyContent={"center"}
+      boxShadow={
+        "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+      }
+    >
 
-      <Flex>
-        {flag ? (
-          <Box width={"40%"} borderRight={"2px solid gray"} p="6rem" mt={10}>
-            <Heading as="h1" size="2xl">
-              THANK YOU FOR ORDER
-            </Heading>
-            <Text mt="0.8rem">
-              Your order id is: {id} <br /> You can track your order on your
-              personal account or continue shoping.
-            </Text>
-            <Text mt="3rem" fontSize={"2rem"} color="gray">
-              FOLLOW US ON INSTAGRAM @haanSanitizer
-            </Text>
+      {
+        flag ? <ThankYou id={id}/> 
+        :
+        (
 
-            <Flex justifyContent={"space-evenly"} pt={"20px"}>
-              <Link href='/' color={"red.400"}>Go To HomePage</Link>
-              <Link href='/product' color={"green.800"}>Continue Shoping</Link>
-            </Flex>
-          </Box>
-        ) : (
-          <Box width={"40%"} borderRight={"2px solid gray"} p="5rem">
-            <Heading width="100%" fontSize={"3rem"} mb="2rem">
-              CHECKOUT
-            </Heading>
-            <Input variant="flushed" placeholder="First Name" />
-            <Input variant="flushed" placeholder="Last Name" />
-            <Input variant="flushed" placeholder="Phone Number" />
-            <Flex>
-              <Select variant="flushed" placeholder="Country">
-                <option value="option1">India</option>
-                <option value="option2">USA</option>
-                <option value="option3">china</option>
-              </Select>
-              <Select variant="flushed" placeholder="City">
-                <option value="option1">Delhi</option>
-                <option value="option2">Mumbai</option>
-                <option value="option3">Bangaluru</option>
-              </Select>
-            </Flex>
-            <Input variant="flushed" placeholder="Address" />
-            <Flex>
-              <Input variant="flushed" placeholder="APL" />
-              <Input variant="flushed" placeholder="Postal Code" />
-            </Flex>
-            <Text mt="0.8rem">Shipping Method</Text>
-            <Stack mt="0.8rem">
-              <Flex justifyContent={"space-between"}>
-                <Radio>Standard(7-14 working days) </Radio> <Text>$14</Text>
-              </Flex>
-              <Flex justifyContent={"space-between"}>
-                <Radio>Express(3-4 working days) </Radio> <Text>$40</Text>
-              </Flex>
-            </Stack>
-
-            <Box>
-              <Text mt="1rem">Payment</Text>
-              <Input variant="flushed" placeholder="XXXXX XXXXX XXXXX XXXXX" />
-              <Flex>
-                <Input variant="flushed" placeholder="Month" />
-                <Input variant="flushed" placeholder="Expiry" />
-              </Flex>
-              <Input variant="flushed" placeholder="CVV" />
-            </Box>
-            <Flex justifyContent={"end"}>
-              <Button
-                mt="0.8rem"
-                
-                bg="orange"
-                color="white"
-                onClick={ 
-                  
-                  genrateId
-                 }
-              >
-                PAY
-              </Button>
-            </Flex>
-          </Box>
-        )}
-
-        <Box width={"60%"}>
-          {/* Render the cart items */}
-
-          <Flex
-            key={cartItems._id}
-            justifyContent={"space-between"}
-            borderBottom={"2px solid gray"}
-          >
-            <Image w="25%" src={cartItems.img} />
-            <Flex
-              minWidth={"70%"}
-              justify={"space-around"}
-              alignItems={"center"}
-            >
+        <Box>
+          <Heading width="100%" fontSize={"3rem"} mb="2rem">
+            CHECKOUT
+          </Heading>
+          <form onSubmit={handleSubmit}>
+            <Flex justifyContent={"space-evenly"} gap={"40px"}>
               <Box>
-                <Text>{cartItems.brand}</Text>
+                <Input
+                  variant="flushed"
+                  placeholder="First Name"
+                  required
+                  name="firstName"
+                />
+                <Input
+                  variant="flushed"
+                  placeholder="Last Name"
+                  name="lastName"  required
+                />
+                <Input
+                  variant="flushed"
+                  placeholder="Phone Number"
+                  name="phoneNumber" required
+                />
+                <Flex>
+                  <Select variant="flushed" placeholder="Country" name="country" required>
+                    <option value="option1">India</option>
+                    <option value="option2">USA</option>
+                    <option value="option3">China</option>
+                  </Select>
+                  <Select variant="flushed" placeholder="City" name="city" required>
+                    <option value="option1">Delhi</option>
+                    <option value="option2">Mumbai</option>
+                    <option value="option3">Bangalore</option>
+                  </Select>
+                </Flex>
+                <Input
+                  variant="flushed"
+                  placeholder="Address"
+                  name="address"
+                />
+                
+                <Text mt="0.8rem">Shipping Method</Text>
+                <Stack mt="0.8rem">
+                  <Flex justifyContent={"space-between"}>
+                    <Radio name="shippingMethod">
+                      Standard(7-14 working days)
+                    </Radio>{" "}
+                    <Text>$14</Text>
+                  </Flex>
+                  <Flex justifyContent={"space-between"}>
+                    <Radio name="shippingMethod">
+                      Express(3-4 working days)
+                    </Radio>{" "}
+                    <Text>$40</Text>
+                  </Flex>
+                </Stack>
               </Box>
-              <Flex align={"center"}>
-                <Button
-                  disabled={quantity === 1}
-                  onClick={() => handleQuantity(-1)}
-                >
-                  -
-                </Button>
-                <Text ml="0.8rem" mr="0.8rem">
-                  {quantity}
-                </Text>
-                <Button onClick={() => handleQuantity(1)}>+</Button>
-              </Flex>
-
-              {/* </Grid> */}
+              <Box>
+                <Text mt="1rem">Payment</Text>
+                <Input
+                  variant="flushed"
+                  placeholder="xxxx xxxx xxxx"
+                  name="cardNumber" required
+                />
+                <Flex>
+                  <Input variant="flushed" placeholder="Month" name="month" required/>
+                  <Input variant="flushed" placeholder="Expiry" name="expiry" required/>
+                </Flex>
+                <Input variant="flushed" placeholder="CVV" name="cvv" required/>
+                <Flex justifyContent={"end"}>
+                  <Button
+                    mt="0.8rem"
+                    bg="orange"
+                    color="white"
+                    
+                    type="submit"
+                  >
+                    PAY
+                  </Button>
+                </Flex>
+              </Box>
             </Flex>
-          </Flex>
-
-          <Flex
-            p="1rem"
-            justifyContent={"space-between"}
-            ml="12.6rem"
-            borderLeft={"2px solid gray"}
-          >
-            <Text w="6rem" fontSize={"0.7rem"}>
-              Shopping calculated in count
-            </Text>
-            <Text fontSize={"0.7rem"}>Total</Text>
-            <Text>€ {cartItems.MRP * quantity}</Text>
-          </Flex>
+          </form>
         </Box>
-      </Flex>
-    </Box>
+        )
+      }
+    </Flex>
   );
 }
 
