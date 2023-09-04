@@ -151,7 +151,7 @@ function NavHeader(props) {
         {/* Right side Search  and Account */}
 
         <Flex alignItems={"center"} >
-          <Link to={"/checkout"} ml={"15px"}>
+          <Link to={"/cart"} ml={"15px"}>
             <FontAwesomeIcon icon={faBagShopping} color="black" fontSize={"20"} />
           </Link>
           <AccountDrawer />
