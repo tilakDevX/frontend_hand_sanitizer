@@ -20,7 +20,7 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
   import Cookies from 'js-cookie';
-
+  let serverUrl = import.meta.env.VITE_SERVER_URL
 const Login1 = () => {
   // Define validation schema using Yup
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Login1 = () => {
   const postLogin = (value) => {
     try {
       axios
-        .post(`https://puce-magpie-tie.cyclic.app/user/login`, value)
+        .post(`${serverUrl}/user/login`, value)
         .then((res) => {
           // console.log(res);
 

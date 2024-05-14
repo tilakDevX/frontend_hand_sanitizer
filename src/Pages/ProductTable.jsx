@@ -15,7 +15,7 @@ import Pagination from "./Pagination";
 
 import DeleteProduct from "./DeleteProduct";
 import UpdateProduct from "./UpdateProduct";
-
+let serverUrl = import.meta.env.VITE_SERVER_URL
 function ProductTable(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProd, setTotalProd] = useState(null);
@@ -27,7 +27,7 @@ function ProductTable(props) {
 
   const limit = 5;
   const fetchdata = async () => {
-    let apiUrl = `https://puce-magpie-tie.cyclic.app/products?sort=${sortOption}&_limit=${limit}&_page=${currentPage}`;
+    let apiUrl = `${serverUrl}/products?sort=${sortOption}&_limit=${limit}&_page=${currentPage}`;
 
     const response = await fetch(apiUrl);
     const data = await response.json();

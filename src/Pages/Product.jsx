@@ -43,7 +43,8 @@ if (token === "") {
 } else {
   cart = "success";
 }
-
+let serverUrl = import.meta.env.VITE_SERVER_URL;
+const user = JSON.parse(localStorage.getItem("user")) || "";
 const Product = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -77,12 +78,12 @@ const Product = () => {
 
   const debouncedSearch = debounce((value) => {
     console.log("searched value", value);
-    const apiUrl = `https://puce-magpie-tie.cyclic.app/products?brand=${value}`;
+    const apiUrl = `${serverUrl}/products?brand=${value}`;
     fetchData(apiUrl);
   }, 300);
 
   const fetchInitialData = () => {
-    const apiUrl = `https://puce-magpie-tie.cyclic.app/products?sort=${sortOption}&_limit=${limit}&_page=${currentPage}`;
+    const apiUrl = `${serverUrl}/products?sort=${sortOption}&_limit=${limit}&_page=${currentPage}`;
     fetchData(apiUrl);
   };
 
@@ -113,7 +114,7 @@ const Product = () => {
 
     try {
       axios
-        .post("https://puce-magpie-tie.cyclic.app/user/cart/add", product, {
+        .post(`${serverUrl}/user/cart/add`, product, {
           headers,
         })
         .then((res) => {
@@ -139,9 +140,8 @@ const Product = () => {
         </Box>
       ),
     });
-
-    
   };
+
   useEffect(() => {
     fetchInitialData();
   }, [currentPage, sortOption, search]);
@@ -249,8 +249,14 @@ const Product = () => {
                         variant="solid"
                         colorScheme="blue"
                         onClick={() => {
-                          navigate("/checkout");
-                          localStorage.setItem("buy", Product._id);
+                          // handleOrdereProduct(Product);
+                          if (Object.keys(user).length > 0) {
+                            navigate(`/checkout/${Product._id}`);
+                            localStorage.setItem("buy", Product._id);
+                          } else {
+                            alert("Please Login!");
+                            navigate("/login")
+                          }
                         }}
                       >
                         Buy Now

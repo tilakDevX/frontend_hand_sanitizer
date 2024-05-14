@@ -27,7 +27,7 @@ const HomeProductSlider = ({ products, isLoading }) => {
       console.log(id)
 
       localStorage.setItem("buy", id);
-      navigate(`/checkout`)
+      navigate(`/product`)
 
   }
   return (

@@ -31,7 +31,7 @@ function AccountDrawer(props) {
         colorScheme={"transparent"}
         onClick={onOpen}
       >
-       <FontAwesomeIcon icon={faUser} fontSize={"20px"}/>
+        <FontAwesomeIcon icon={faUser} fontSize={"20px"} />
       </Button>
 
       <Drawer
@@ -60,15 +60,25 @@ function AccountDrawer(props) {
               <Box>
                 <Text>Name: {user.name}</Text>
                 <Text>Email: {user.email}</Text>
-                <Button
-                  onClick={() => {
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("token");
-                    onClose(); // Close the drawer when the button is clicked
-                  }}
-                >
-                  LogOut
-                </Button>
+                <Box display={"flex"} gap={"10px"}>
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("token");
+                      onClose(); // Close the drawer when the button is clicked
+                    }}
+                  >
+                    LogOut
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      navigate("/ordered-product-list");
+                      onClose(); // Close the drawer when the button is clicked
+                    }}
+                  >
+                    Ordered List
+                  </Button>
+                </Box>
               </Box>
             )}
 

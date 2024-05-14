@@ -21,7 +21,7 @@ import btmIcon3 from "../assets/btmIcon-3.jpg";
 import btmIcon4 from "../assets/btmIcon-4.jpg";
 import btmIcon5 from "../assets/bmtIcon-5.jpg";
 import { useNavigate } from "react-router-dom";
-
+let serverUrl = import.meta.env.VITE_SERVER_URL
 function Home(props) {
   let [products, setProduct] = useState([]);
   let [isLoading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ function Home(props) {
   // https://sanitizer-5qvt.onrender.com/products
   useEffect(() => {
     axios
-      .get(`https://puce-magpie-tie.cyclic.app/products`)
+      .get(`${serverUrl}/products`)
       .then((res) => {
         setProduct(res.data.product);
         console.log("geting product", res);

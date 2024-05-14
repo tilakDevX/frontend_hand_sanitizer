@@ -26,11 +26,11 @@ const SignUp = () => {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [signup_status, setSignupStatus] = useState("");
-
+  let serverUrl = import.meta.env.VITE_SERVER_URL
   const postSignUp = (value) => {
     try {
       axios
-        .post(`https://puce-magpie-tie.cyclic.app/user/signup`, value)
+        .post(`${serverUrl}/user/signup`, value)
         .then((res) => {
           console.log(res);
           setSignupStatus(res.data.message);

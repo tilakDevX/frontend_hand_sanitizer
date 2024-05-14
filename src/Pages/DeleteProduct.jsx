@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import React from "react";
-
+let serverUrl = import.meta.env.VITE_SERVER_URL
 function DeleteProduct({id,setData}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
@@ -21,7 +21,7 @@ function DeleteProduct({id,setData}) {
     try {
       axios
         .delete(
-          `https://puce-magpie-tie.cyclic.app/products/delete/${id}`,
+          `${serverUrl}/products/delete/${id}`,
           config
         )
         .then((res) => {

@@ -17,11 +17,14 @@ function ThankYou({id}) {
           </Text>
 
           <Flex justifyContent={"space-evenly"} pt={"20px"}>
-            <Link href="/" color={"red.400"}>
-              Go To HomePage
+            <Link href="/ordered-product-list" color={"green.800"}>
+              View your ordered product list.
             </Link>
             <Link href="/product" color={"green.800"}>
               Continue Shoping
+            </Link>
+            <Link href="/" color={"red.400"}>
+              Go To HomePage
             </Link>
           </Flex>
         </Box>

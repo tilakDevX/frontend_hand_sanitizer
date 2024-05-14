@@ -27,7 +27,7 @@ function AddProductModel(props) {
   const [price, setPrice] = useState("");
   const [finalPrice, setFinalPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-
+  let serverUrl = import.meta.env.VITE_SERVER_URL
   const handleSubmit = () => {
     const newProduct = {
       brand: productName,
@@ -47,7 +47,7 @@ function AddProductModel(props) {
     };
 
     axios
-      .post(`https://puce-magpie-tie.cyclic.app/products/create`, newProduct,config)
+      .post(`${serverUrl}/products/create`, newProduct,config)
       .then((response) => {
         console.log("Product added successfully:", response);
         onClose();

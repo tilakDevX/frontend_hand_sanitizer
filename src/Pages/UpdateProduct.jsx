@@ -14,7 +14,7 @@ import {
     useDisclosure,
   } from "@chakra-ui/react";
 import axios from "axios";
-  
+let serverUrl = import.meta.env.VITE_SERVER_URL
 function UpdateProduct({ product, setData, setUpdate }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -44,7 +44,7 @@ function UpdateProduct({ product, setData, setUpdate }) {
     };
     axios
       .put(
-        `https://puce-magpie-tie.cyclic.app/products/edit/${product._id}`,
+        `${serverUrl}/products/edit/${product._id}`,
         editedProduct,config
       )
       .then((response) => {

@@ -9,6 +9,7 @@ import Checkout from "../Pages/Checkout";
 import AdminDashboard from "../Pages/AdminDashboard";
 import NewPassword from "../Pages/NewPassword";
 import Cart from "../Components/Cart";
+import OrderedProduct from "../Pages/OrderedProduct"
 
 const AllRoutes = () => {
   return (
@@ -19,12 +20,14 @@ const AllRoutes = () => {
         <Route path="/login" element={<Login1 />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
 
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout/:productId" element={<Checkout />} />
 
         <Route path="/admin" element={<AdminDashboard />} />
 
         <Route path="/newpass" element={<NewPassword />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/ordered-product-list" element={<OrderedProduct />} />
+
       </Routes>
     </div>
   );

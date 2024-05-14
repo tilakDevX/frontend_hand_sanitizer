@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
- 
+let serverUrl = import.meta.env.VITE_SERVER_URL
 
 const NewPassword = () => {
   
@@ -63,7 +63,7 @@ const NewPassword = () => {
 
       
       const response = await axios.post(
-        "https://puce-magpie-tie.cyclic.app/user/newpassword",
+        `${serverUrl}/user/newpassword`,
         {
           email,
           password: newPassword,

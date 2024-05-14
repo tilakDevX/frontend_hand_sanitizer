@@ -26,7 +26,7 @@ const token = localStorage.getItem("token") || "";
 const headers = {
   Authorization: `Bearer ${token}`,
 };
-
+let serverUrl = import.meta.env.VITE_SERVER_URL;
 function Cart(props) {
   const [cart, setCart] = useState([]);
   const [spin, setSpinner] = useState(true);
@@ -34,7 +34,6 @@ function Cart(props) {
 
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
-
 
   const [isLargerThan820] = useMediaQuery("(max-width: 1050px)");
   const handleMouseEnter = () => {
@@ -49,7 +48,7 @@ function Cart(props) {
     console.log(id);
     try {
       axios
-        .delete(`https://puce-magpie-tie.cyclic.app/user/cart/product/${id}`, {
+        .delete(`${serverUrl}/user/cart/product/${id}`, {
           headers,
         })
         .then((res) => {
@@ -67,7 +66,7 @@ function Cart(props) {
   const GetCart = () => {
     try {
       axios
-        .get(`https://puce-magpie-tie.cyclic.app/user/cart/product`, {
+        .get(`${serverUrl}/user/cart/product`, {
           headers,
         })
         .then((res) => {
@@ -120,15 +119,21 @@ function Cart(props) {
   }, []);
 
   return (
-    <Flex m={"auto"} mt={"13rem"} justifyContent={"space-evenly"} alignItems = "center" flexDir={isLargerThan820 ? "column" : "row"}>
-      <Box width={isLargerThan820 ? "65%" : "45%"}
-      
-      mb={isLargerThan820 && "3rem"}
+    <Flex
+      m={"auto"}
+      mt={"13rem"}
+      justifyContent={"space-evenly"}
+      alignItems="center"
+      flexDir={isLargerThan820 ? "column" : "row"}
+    >
+      <Box
+        width={isLargerThan820 ? "65%" : "45%"}
+        mb={isLargerThan820 && "3rem"}
       >
-        {spin ? (
+        {spin && cart?.length===0 ? (
           <Center>
             {" "}
-            <Spinner m={"4rem"} size="xl" />
+            <p>Cart is empty</p>
           </Center>
         ) : (
           <TableContainer>
@@ -196,7 +201,7 @@ function Cart(props) {
           </TableContainer>
         )}
       </Box>
-      <Box width={ isLargerThan820 ? "40%" : "20%"} height={"20vh"}>
+      <Box width={isLargerThan820 ? "40%" : "20%"} height={"20vh"}>
         <Text fontSize={"12px"}>SPEND 8,60€ MORE TO RECEIVE FREE SHIPPING</Text>
 
         <Divider
@@ -205,8 +210,8 @@ function Cart(props) {
           borderRadius={"10px"}
           opacity={1}
         />
-        {spin ? (
-          <Spinner />
+        {spin && cart?.length==0 ? (
+         <p>Cart is empty</p>
         ) : (
           <Text
             textAlign={"center"}
@@ -229,7 +234,10 @@ function Cart(props) {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={() => {
-              navigate("/checkout");
+              alert(
+                "Sorry! This feature not available yet. You can't checkout from here."
+              );
+              // navigate("/checkout");
             }}
           >
             Checkout
